@@ -7,9 +7,16 @@ package ch.zeyger.algorithms.data.nodes;
  */
 public class Node2D extends NodeND {
 
-    public Node2D(double x, double y) {
+    public int id;
+
+    public Node2D(int id, double x, double y) {
+        this.id = id;
         add("x", x);
         add("y", y);
+    }
+
+    public int id() {
+        return id;
     }
 
     public double x() {
@@ -18,5 +25,10 @@ public class Node2D extends NodeND {
 
     public double y() {
         return get("y");
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode() + id;
     }
 }

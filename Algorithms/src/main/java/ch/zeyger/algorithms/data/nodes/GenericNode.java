@@ -104,7 +104,6 @@ public class GenericNode<T> implements Iterable<T> {
         GenericNode<?> that = (GenericNode<?>) o;
 
         return elements != null ? elements.equals(that.elements) : that.elements == null;
-
     }
 
     @Override

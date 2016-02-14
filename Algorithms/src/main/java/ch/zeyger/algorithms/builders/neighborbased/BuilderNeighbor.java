@@ -15,7 +15,7 @@ import java.util.Set;
  * Date:    14.02.2016
  * Project: Algorithms
  */
-public abstract class BuilderNeighbor implements Builders {
+public class BuilderNeighbor implements Builders {
 
     /**
      * Set of the already visited node that will nod be included in the neighbourhood.

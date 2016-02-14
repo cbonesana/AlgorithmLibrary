@@ -7,8 +7,8 @@ package ch.zeyger.algorithms.data.nodes;
  */
 public class Node3D extends Node2D {
 
-    public Node3D(double x, double y, double z) {
-        super(x, y);
+    public Node3D(int id, double x, double y, double z) {
+        super(id, x, y);
         add("z", z);
     }
 
