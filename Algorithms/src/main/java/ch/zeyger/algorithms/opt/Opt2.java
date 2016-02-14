@@ -27,7 +27,7 @@ public class Opt2 extends Opt {
     }
 
     /**
-     * Function to Exchange two given nodes and build the new optimized tour.
+     * Function to Exchange two given nodes and neighbourhood the new optimized tour.
      * @param i first index
      * @param j second index
      */

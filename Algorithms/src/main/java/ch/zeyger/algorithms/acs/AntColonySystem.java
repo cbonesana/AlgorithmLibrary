@@ -1,7 +1,7 @@
 package ch.zeyger.algorithms.acs;
 
 import ch.zeyger.algorithms.builders.Builders;
-import ch.zeyger.algorithms.builders.nn.NearestNeighbour;
+import ch.zeyger.algorithms.builders.neighborbased.nearest.NearestNeighbor;
 import ch.zeyger.algorithms.data.nodes.NodeND;
 import ch.zeyger.algorithms.data.structures.Cycle;
 import ch.zeyger.algorithms.data.structures.Graph;
@@ -68,8 +68,8 @@ public class AntColonySystem {
     }
 
     /**
-     * A build algorithm is needed to build the initial solution. If no builder is assigned, a
-     * {@link NearestNeighbour} algorithm will be used.
+     * A neighbourhood algorithm is needed to neighbourhood the initial solution. If no builder is assigned, a
+     * {@link NearestNeighbor} algorithm will be used.
      * @param buildAlgorithm the builder to use
      */
     public void setBuildAlgorithm(Builders buildAlgorithm) {
@@ -118,10 +118,10 @@ public class AntColonySystem {
         int steadyBestCounter = 0;
         int steadyLocalCounter = 0;
 
-        if (buildAlgorithm == null) buildAlgorithm = new NearestNeighbour();
+        if (buildAlgorithm == null) buildAlgorithm = new NearestNeighbor();
         if (optimizationAlgorithm == null) optimizationAlgorithm = new Opt2();
 
-        // build an initial solution
+        // neighbourhood an initial solution
         if (startNode == -1) startNode = rand.nextInt(size); // random start
 
         bestSolution = buildAlgorithm.buildCycle(graph, startNode);
@@ -145,7 +145,7 @@ public class AntColonySystem {
             for (Ant ant : ants)
                 ant.initialize(rand.nextInt(size));
 
-            // each ant build a solution adding node after node
+            // each ant neighbourhood a solution adding node after node
             for (int i=0; i < graph.size() -1; i++) {
                 for (Ant ant : ants)
                     ant.generateSolution(q0Effective, t0, ro);
