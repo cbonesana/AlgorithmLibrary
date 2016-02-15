@@ -5,7 +5,10 @@ import ch.zeyger.algorithms.data.structures.Graph;
 import org.junit.Before;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -15,15 +18,26 @@ import java.util.Scanner;
  */
 public class TSP {
 
-    public Graph graph;
+    public Map<String, Graph> graphs = new HashMap<>();
     public double best = 0.0;
+
+    public String[] filenames = {
+            "ch130.tsp", "ed_rares.tsp", "ed_rares_2.tsp", "plain3.tsp"
+    };
 
     @Before
     public void setUp() throws Exception {
-        graph = new Graph();
-        URL res = this.getClass().getClassLoader().getResource("tsp/plain3.tsp");
+        for (String f : filenames) {
+            Graph g = readFile("tsp/" + f);
+            graphs.put(f, g);
+        }
+    }
 
-        if (res == null) return;
+    private Graph readFile(String filename) throws FileNotFoundException {
+        Graph graph = new Graph();
+        URL res = this.getClass().getClassLoader().getResource(filename);
+
+        if (res == null) throw new FileNotFoundException();
 
         try (Scanner scanner = new Scanner(new File(res.getFile()))) {
             int i = 0;
@@ -45,8 +59,7 @@ public class TSP {
                 Node2D node = new Node2D(k, x, y);
                 graph.add(k, node);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+        return graph;
     }
 }

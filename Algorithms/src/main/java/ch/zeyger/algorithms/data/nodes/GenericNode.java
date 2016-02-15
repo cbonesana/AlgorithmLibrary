@@ -24,7 +24,15 @@ public class GenericNode<T> implements Iterable<T> {
      */
     protected Map<String, Integer> names = new HashMap<>();
 
-    public GenericNode() {
+    /**
+     * Empty constructor.
+     */
+    public GenericNode() {}
+
+    public GenericNode(GenericNode<T> another) {
+        // TODO: currently this is a shallow copy, should became a deep copy
+        this.elements = new ArrayList<>(another.elements);
+        this.names = new HashMap<>(another.names);
     }
 
     /**

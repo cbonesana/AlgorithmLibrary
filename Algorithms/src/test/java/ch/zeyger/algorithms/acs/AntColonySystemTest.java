@@ -2,6 +2,8 @@ package ch.zeyger.algorithms.acs;
 
 import ch.zeyger.algorithms.TSP;
 import ch.zeyger.algorithms.data.structures.Cycle;
+import ch.zeyger.algorithms.data.structures.Graph;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -22,6 +24,15 @@ public class AntColonySystemTest extends TSP {
     double q0Min        = 0.4;
     double q0Step       = 0.005;
     double threshold    = 10.0;
+
+    Graph graph;
+
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        graph = graphs.get("plain3.tsp");
+    }
 
     @Test
     public void testACS() throws Exception {

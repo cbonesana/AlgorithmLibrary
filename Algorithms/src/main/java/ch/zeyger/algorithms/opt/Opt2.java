@@ -44,11 +44,9 @@ public class Opt2 extends Opt {
         }
 
         for (int n = 0; n < (c - b + 1)/2; n++) {
-            int bn = cycle.pos(b + n);
-            int cn = cycle.pos(c - n);
-
-            cycle.pos(bn, cn);
-            cycle.pos(cn, bn);
+            int bn = b + n;
+            int cn = c - n;
+            cycle.swap(bn, cn);
         }
     }
 }

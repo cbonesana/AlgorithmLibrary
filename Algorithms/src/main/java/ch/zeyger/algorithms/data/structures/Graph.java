@@ -22,6 +22,23 @@ public class Graph extends GenericNode<NodeND> {
      */
     protected Map<Pair<NodeND, NodeND>, Double> distances = new HashMap<>();
 
+    /**
+     * Empty constructor.
+     */
+    public Graph() {}
+
+    /**
+     * Copy constructor.
+     * @param another the object to copy from
+     */
+    public Graph(Graph another) {
+        super(another);
+        this.distances = new HashMap<>(another.distances.size());
+        for (Map.Entry<Pair<NodeND, NodeND>, Double> entry : another.distances.entrySet()) {
+            distances.put(entry.getKey(), entry.getValue());
+        }
+    }
+
     @Override
     public void add(String name, int index, NodeND value) {
         super.add(name, index, value);

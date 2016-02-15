@@ -4,6 +4,7 @@ import ch.zeyger.algorithms.data.nodes.NodeND;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Author:  Claudio Bonesana
@@ -13,6 +14,21 @@ import java.util.List;
 public class Path extends Graph {
 
     protected List<Integer> path = new ArrayList<>();
+
+    /**
+     * Empty constructor.
+     */
+    public Path() {}
+
+    /**
+     * Copy constructor.
+     * @param another the path to copy
+     */
+    public Path(Path another) {
+        super(another);
+        this.path = new ArrayList<>(another.path.size());
+        this.path.addAll(another.path.stream().collect(Collectors.toList()));
+    }
 
     @Override
     public void add(NodeND value) {
@@ -38,12 +54,16 @@ public class Path extends Graph {
     }
 
     /**
-     * Set an index in the path at the given position
-     * @param pos the destination position
-     * @param index the index that will be saved at this position
+     * Swaps the content of the two positions.
+     * @param p1 first node
+     * @param p2 second node
      */
-    public void pos(int pos, int index) {
-        path.add(pos, index);
+    public void swap(int p1, int p2) {
+        int i1 = pos(p1);
+        int i2 = pos(p2);
+
+        path.set(p1, i2);
+        path.set(p2, i1);
     }
 
     public double getLength() {
