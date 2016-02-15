@@ -16,13 +16,12 @@ import java.util.Scanner;
 public class TSP {
 
     public Graph graph;
+    public double best = 0.0;
 
     @Before
     public void setUp() throws Exception {
-
         graph = new Graph();
-//        URL res = this.getClass().getClassLoader().getResource("tsp/ch130.tsp");
-        URL res = this.getClass().getClassLoader().getResource("tsp/ed_rares_2.tsp");
+        URL res = this.getClass().getClassLoader().getResource("tsp/plain3.tsp");
 
         if (res == null) return;
 
@@ -31,6 +30,11 @@ public class TSP {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine(); i++;
 
+                if (line.startsWith("BEST")) {
+                    String[] chunk = line.split(":");
+                    best = Double.parseDouble(chunk[1]);
+                    continue;
+                }
                 if (i < 8) continue;
                 if (line.startsWith("EOF")) break;
 
@@ -38,14 +42,9 @@ public class TSP {
                 int k = Integer.parseInt(chunk[0]);
                 double x = Double.parseDouble(chunk[1]);
                 double y = Double.parseDouble(chunk[2]);
-//                double z = Double.parseDouble(chunk[3]);
-//                double l = Double.parseDouble(chunk[4]);
-//                if (l > 5000) continue;
-//                Node3D node = new Node3D(k, x, y, z);
                 Node2D node = new Node2D(k, x, y);
                 graph.add(k, node);
             }
-            System.out.println(i);
         } catch (Exception e) {
             e.printStackTrace();
         }

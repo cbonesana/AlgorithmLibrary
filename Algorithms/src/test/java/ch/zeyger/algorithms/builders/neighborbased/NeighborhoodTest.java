@@ -4,7 +4,6 @@ import ch.zeyger.algorithms.TSP;
 import ch.zeyger.algorithms.builders.neighborbased.farthest.FarthestNeighbor;
 import ch.zeyger.algorithms.builders.neighborbased.nearest.NearestNeighbor;
 import ch.zeyger.algorithms.data.structures.Cycle;
-import ch.zeyger.algorithms.opt.Opt2;
 import org.junit.After;
 import org.junit.Test;
 
@@ -15,37 +14,16 @@ import org.junit.Test;
  */
 public class NeighborhoodTest extends TSP {
 
-    Cycle cycle;
+    public Cycle cycle;
 
     @After
     public void tearDown() throws Exception {
+        assert (cycle.getLength() == best);
         System.out.println(cycle.getLength());
 
         for (int i=0; i<graph.size(); i++) {
-            System.out.println(cycle.get(i).get(0) + " " + cycle.get(i).get(1) + " " + cycle.get(i).get(2));
+            System.out.println(cycle.get(i).get(0) + " " + cycle.get(i).get(1));
         }
-    }
-
-    @Test
-    public void TestRandomNeighbor() {
-//        BuilderNeighbor nb = new BuilderNeighbor(new NearestSearch(), (graph1, nodeVisited, current) -> {
-//            List<NeighborhoodNode<NodeND>> neighbourhood = new ArrayList<>();
-//            for (int i = 0; i < graph1.size(); i++){
-//                NodeND node = graph1.get(i);
-//                double d = graph1.distance(current, node);
-//                if (!nodeVisited.contains(node) && d < 10000000.0){
-//                    NeighborhoodNode<NodeND> nNode = new NeighborhoodNode<>();
-//                    nNode.node = node;
-//                    nNode.distance = d;
-//                    neighbourhood.add(nNode);
-//                }
-//            }
-//
-//            return neighbourhood;
-//        });
-        NearestNeighbor nb = new NearestNeighbor();
-        cycle = nb.buildCycle(graph, 0);
-        new Opt2().opt(cycle);
     }
 
     @Test
@@ -58,5 +36,6 @@ public class NeighborhoodTest extends TSP {
     public void TestFarthestNeighbor() {
         FarthestNeighbor fn = new FarthestNeighbor();
         cycle = fn.buildCycle(graph, 0);
+
     }
 }
