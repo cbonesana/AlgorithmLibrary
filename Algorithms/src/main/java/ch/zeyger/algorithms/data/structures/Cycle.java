@@ -9,6 +9,19 @@ import ch.zeyger.algorithms.data.nodes.NodeND;
  */
 public class Cycle extends Path {
 
+    /**
+     * Empty constructor.
+     */
+    public Cycle() {}
+
+    /**
+     * Copy constructor.
+     * @param another the path to copy
+     */
+    public Cycle(Cycle another) {
+        super(another);
+    }
+
     @Override
     public NodeND get(int index) {
         int indexInPath = path.get(index % size()); // circularity

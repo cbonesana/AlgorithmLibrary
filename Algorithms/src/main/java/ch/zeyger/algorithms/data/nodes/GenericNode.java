@@ -24,6 +24,9 @@ public class GenericNode<T> implements Iterable<T> {
      */
     protected Map<String, Integer> names = new HashMap<>();
 
+    /**
+     * Empty constructor.
+     */
     public GenericNode() {
     }
 

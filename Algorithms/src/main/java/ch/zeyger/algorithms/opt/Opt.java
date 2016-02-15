@@ -28,8 +28,7 @@ public abstract class Opt {
      * @param minExchangeValue minimum gain value to perform an exchange
      * @param minStopValue minimum value to stop the optimization
      */
-    public void opt(Cycle cycle, double minExchangeValue, double minStopValue)
-    {
+    public void opt(Cycle cycle, double minExchangeValue, double minStopValue) {
         double bestGain, gain;
 
         do{

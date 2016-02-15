@@ -3,6 +3,7 @@ package ch.zeyger.algorithms.data.structures;
 import ch.zeyger.algorithms.data.nodes.NodeND;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -13,6 +14,21 @@ import java.util.List;
 public class Path extends Graph {
 
     protected List<Integer> path = new ArrayList<>();
+
+    /**
+     * Empty constructor.
+     */
+    public Path() {}
+
+    /**
+     * Copy constructor.
+     * @param another the path to copy
+     */
+    public Path(Path another) {
+        super(another);
+        this.path = new ArrayList<>(another.size());
+        Collections.copy(this.path, another.path);
+    }
 
     @Override
     public void add(NodeND value) {
