@@ -3,8 +3,8 @@ package ch.zeyger.algorithms.data.structures;
 import ch.zeyger.algorithms.data.nodes.NodeND;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Author:  Claudio Bonesana
@@ -26,8 +26,8 @@ public class Path extends Graph {
      */
     public Path(Path another) {
         super(another);
-        this.path = new ArrayList<>(another.size());
-        Collections.copy(this.path, another.path);
+        this.path = new ArrayList<>(another.path.size());
+        this.path.addAll(another.path.stream().collect(Collectors.toList()));
     }
 
     @Override

@@ -32,7 +32,11 @@ public class Graph extends GenericNode<NodeND> {
      * @param another the object to copy from
      */
     public Graph(Graph another) {
-        this.distances = new HashMap<>(another.distances);
+        super(another);
+        this.distances = new HashMap<>(another.distances.size());
+        for (Map.Entry<Pair<NodeND, NodeND>, Double> entry : another.distances.entrySet()) {
+            distances.put(entry.getKey(), entry.getValue());
+        }
     }
 
     @Override

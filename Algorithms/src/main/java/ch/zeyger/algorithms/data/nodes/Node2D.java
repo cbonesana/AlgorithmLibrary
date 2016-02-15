@@ -7,7 +7,15 @@ package ch.zeyger.algorithms.data.nodes;
  */
 public class Node2D extends NodeND {
 
-    public int id;
+    protected int id;
+
+    /**
+     * Copy constructor
+     * @param another an happy node to copy
+     */
+    public Node2D(Node2D another) {
+        this(another.id(), another.x(), another.y());
+    }
 
     public Node2D(int id, double x, double y) {
         this.id = id;
@@ -30,5 +38,10 @@ public class Node2D extends NodeND {
     @Override
     public int hashCode() {
         return super.hashCode() + id;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Node2D{id=%d, x=%f, y=%f}", id(), x(), y());
     }
 }
