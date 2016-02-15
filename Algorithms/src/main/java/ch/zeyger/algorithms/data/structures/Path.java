@@ -54,12 +54,16 @@ public class Path extends Graph {
     }
 
     /**
-     * Set an index in the path at the given position
-     * @param pos the destination position
-     * @param index the index that will be saved at this position
+     * Swaps the content of the two positions.
+     * @param p1 first node
+     * @param p2 second node
      */
-    public void pos(int pos, int index) {
-        path.add(pos, index);
+    public void swap(int p1, int p2) {
+        int i1 = pos(p1);
+        int i2 = pos(p2);
+
+        path.set(p1, i2);
+        path.set(p2, i1);
     }
 
     public double getLength() {

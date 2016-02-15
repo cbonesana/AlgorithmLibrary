@@ -29,7 +29,7 @@ public class SimulatedAnnealing {
     protected double minGain = 0.0;
 
     /** Time limits in milliseconds */
-    protected long stopTime = 60000;
+    protected long stopTime = 180000;
     /** Random seed. */
     protected long seed;
 
@@ -138,7 +138,7 @@ public class SimulatedAnnealing {
 
                 if (dE < minGain) {
                     // we have a gain in the solution
-                    next = curr;
+                    curr = next;
 
                     if (fNext < fBest){
                         // the new solution is alto better than the best solution
@@ -160,5 +160,4 @@ public class SimulatedAnnealing {
 
         return best;
     }
-
 }

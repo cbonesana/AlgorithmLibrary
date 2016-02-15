@@ -4,7 +4,9 @@ import ch.zeyger.algorithms.TSP;
 import ch.zeyger.algorithms.builders.neighborbased.farthest.FarthestNeighbor;
 import ch.zeyger.algorithms.builders.neighborbased.nearest.NearestNeighbor;
 import ch.zeyger.algorithms.data.structures.Cycle;
+import ch.zeyger.algorithms.data.structures.Graph;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -15,6 +17,14 @@ import org.junit.Test;
 public class NeighborhoodTest extends TSP {
 
     public Cycle cycle;
+    public Graph graph;
+
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        graph = graphs.get("plain3.tsp");
+    }
 
     @After
     public void tearDown() throws Exception {
