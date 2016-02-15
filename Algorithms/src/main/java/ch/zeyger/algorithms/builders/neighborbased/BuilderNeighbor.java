@@ -1,64 +1,49 @@
-package ch.zeyger.algorithms.builders.nn;
+package ch.zeyger.algorithms.builders.neighborbased;
 
 import ch.zeyger.algorithms.builders.Builders;
+import ch.zeyger.algorithms.builders.neighborbased.utils.NeighborhoodNode;
 import ch.zeyger.algorithms.data.nodes.NodeND;
 import ch.zeyger.algorithms.data.structures.Cycle;
 import ch.zeyger.algorithms.data.structures.Graph;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 /**
  * Author:  Claudio Bonesana
- * Date:    13.02.2016
+ * Date:    14.02.2016
  * Project: Algorithms
  */
-public class NearestNeighbour implements Builders {
+public class BuilderNeighbor implements Builders {
 
     /**
      * Set of the already visited node that will nod be included in the neighbourhood.
      */
     protected Set<NodeND> nodeVisited = new HashSet<>();
+    protected NeighborSearch search;
+    protected NeighborBuilder build;
 
-    /**
-     * Given the input graph and the current node, build the neighbourhood around this one.
-     * @param graph the input graph
-     * @param current last node inserted in the cycle
-     * @return a list of the neighbourhood nodes
-     */
-    private List<NeighbourNode<NodeND>> buildNeighbourhood(Graph graph, NodeND current) {
-        List<NeighbourNode<NodeND>> neighbourhood = new ArrayList<>();
-
-        for (int i = 0; i < graph.size(); i++){
-            NodeND node = graph.get(i);
-            if (!nodeVisited.contains(node)){
-                NeighbourNode<NodeND> nNode = new NeighbourNode<>();
-                nNode.node = node;
-                nNode.distance = graph.distance(current, node);
-                neighbourhood.add(nNode);
-            }
-        }
-
-        return neighbourhood;
+    public BuilderNeighbor(NeighborSearch search, NeighborBuilder build) {
+        this.search = search;
+        this.build = build;
     }
 
     /**
-     * Find the nearest neighbour inside the neighbourhood build around the current node.
+     * Find the nearest neighbour inside the neighbourhood neighbourhood around the current node.
      * @param neighbourhood the neighbourhood around the current node
      * @return the nearest neighbour to the current node
      */
-    public NeighbourNode<NodeND> nearestSearch(List<NeighbourNode<NodeND>> neighbourhood) {
-        NeighbourNode<NodeND> min = neighbourhood.get(0);
+    public NeighborhoodNode<NodeND> findInNeighbourhood(List<NeighborhoodNode<NodeND>> neighbourhood) {
+        NeighborhoodNode<NodeND> target = neighbourhood.get(0);
 
         if (neighbourhood.size() > 1) {
-            for (NeighbourNode<NodeND> neighbour : neighbourhood) {
-                if (neighbour.distance < min.distance)
-                    min = neighbour;
+            for (NeighborhoodNode<NodeND> neighbour : neighbourhood) {
+                if (search.neighbour(neighbour, target))
+                    target = neighbour;
             }
         }
-        return min;
+        return target;
     }
 
     /**
@@ -89,11 +74,11 @@ public class NearestNeighbour implements Builders {
         for (int j = 0; j < graph.size() -1; j++) {
             // find the shortest path between the current node and an unvisited node
             // the neighbourhood size reduces by 1 node each iteration
-            // build the neighbourhood
-            List<NeighbourNode<NodeND>> neighbourhood = buildNeighbourhood(graph, current);
+            // neighbourhood the neighbourhood
+            List<NeighborhoodNode<NodeND>> neighbourhood = build.neighbourhood(graph, nodeVisited, current);
 
             // search the nearest node inside the neighbourhood
-            NeighbourNode<NodeND> nearest = nearestSearch(neighbourhood);
+            NeighborhoodNode<NodeND> nearest = findInNeighbourhood(neighbourhood);
 
             current = nearest.node;     // set the current node as the next nearest one
             nodeVisited.add(current);   // set the node as visited
