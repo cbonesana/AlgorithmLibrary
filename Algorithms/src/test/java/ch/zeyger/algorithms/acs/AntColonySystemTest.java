@@ -14,7 +14,7 @@ import org.junit.Test;
 public class AntColonySystemTest extends TSP {
 
     int ants            = 1;//4;
-    int stopTime        = 180;
+    int stopTime        = 10;
     int maxBestCounter  = 30;
     int maxLocalCounter = 100;
     long seed           = 42;

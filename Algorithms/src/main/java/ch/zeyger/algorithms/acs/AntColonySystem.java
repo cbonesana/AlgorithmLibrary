@@ -30,6 +30,7 @@ public class AntColonySystem {
     protected Opt optimizationAlgorithm = null;
 
     protected int antNumber;
+
     protected double alpha;
     protected double ro;
     protected double q0;
@@ -37,8 +38,10 @@ public class AntColonySystem {
     protected double q0Step;
     protected double t0;
     protected double threshold;
+
     protected int maxBestCounter;
     protected int maxLocalCounter;
+    protected int optIteration = 100;   // this is a workaround for an infinite loop inside the Opt2 class
 
     /**
      * Initialize the Ant Colony System with some parameters.
@@ -125,7 +128,7 @@ public class AntColonySystem {
         if (startNode == -1) startNode = rand.nextInt(size); // random start
 
         bestSolution = buildAlgorithm.buildCycle(graph, startNode);
-        optimizationAlgorithm.opt(bestSolution);
+        optimizationAlgorithm.opt(bestSolution, optIteration);
 
         bestLength = bestSolution.getLength();
 
@@ -135,10 +138,8 @@ public class AntColonySystem {
 
         // hatch ants
         ants = new Ant[antNumber];
-        for (int i = 0; i < antNumber; i++) {
+        for (int i = 0; i < antNumber; i++)
             ants[i] = new Ant(pheromone, graph, rand);
-            ants[i].setOptimizationAlgorithm(optimizationAlgorithm);
-        }
 
         do {
             // place the ants on random nodes
@@ -156,8 +157,8 @@ public class AntColonySystem {
             localBestAnt = ants[0];
             bestFound = false;
             for (Ant ant : ants) {
-                ant.completeTour();             // optimize the found solution
-                val = ant.solution.getLength(); // get the optimized solution
+                optimizationAlgorithm.opt(ant.solution, optIteration);   // optimize the found solution
+                val = ant.solution.getLength();                 // get the optimized solution
 
                 if (val < localMinLength) {
                     // keep the best local solution

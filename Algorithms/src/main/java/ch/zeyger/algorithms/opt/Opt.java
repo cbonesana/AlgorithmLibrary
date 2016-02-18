@@ -90,7 +90,7 @@ public abstract class Opt {
         double bestGain;
         for (int i = 0; i < iterations; i++) {
             bestGain = update(cycle);
-            if (bestGain < minStopValue)
+            if (bestGain >= minStopValue)
                 break;
         }
     }

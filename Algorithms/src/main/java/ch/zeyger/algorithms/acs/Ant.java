@@ -3,8 +3,6 @@ package ch.zeyger.algorithms.acs;
 import ch.zeyger.algorithms.data.nodes.NodeND;
 import ch.zeyger.algorithms.data.structures.Cycle;
 import ch.zeyger.algorithms.data.structures.Graph;
-import ch.zeyger.algorithms.opt.Opt;
-import ch.zeyger.algorithms.opt.Opt2;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -28,16 +26,10 @@ public class Ant {
     protected NodeND current;       // current visited node
     protected NodeND next;          // next visited node
 
-    protected Opt optimizationAlgorithm = null;       // local optimization
-
     public Ant(Pheromone pheromone, Graph graph, Random rand) {
         this.pheromone = pheromone;
         this.graph = graph;
         this.rand = rand;
-    }
-
-    public void setOptimizationAlgorithm(Opt optimizationAlgorithm) {
-        this.optimizationAlgorithm = optimizationAlgorithm;
     }
 
     /**
@@ -55,8 +47,6 @@ public class Ant {
 
         solution.add(current);  // add the first city to the cycle
         map.add(current);       // mark the first city as visited
-
-        if (optimizationAlgorithm == null) optimizationAlgorithm = new Opt2();
     }
 
     /**
@@ -163,13 +153,6 @@ public class Ant {
     public void generateSolution(double q0, double t0, double ro) {
         visitNode(q0);
         updateTrail(t0, ro);
-    }
-
-    /**
-     * Complete the cycle by optimizing it with a local optimization.
-     */
-    public void completeTour() {
-        optimizationAlgorithm.opt(solution);
     }
 
     /**

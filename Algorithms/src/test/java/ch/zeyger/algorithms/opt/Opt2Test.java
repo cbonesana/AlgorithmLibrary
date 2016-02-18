@@ -47,4 +47,10 @@ public class Opt2Test extends TSP {
 
         assert (i1.equals(j2) && j1.equals(i2));
     }
+
+    @Test
+    public void testOpt2() throws Exception {
+        opt2.opt(input, 100);
+        System.out.println(input.getLength());
+    }
 }
