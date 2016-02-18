@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static ch.zeyger.algorithms.utils.PairMapUtils.getUniqueValue;
+import static ch.zeyger.algorithms.utils.PairMapUtils.putUniqueValue;
 
 /**
  * Author:  Claudio Bonesana
@@ -39,20 +40,9 @@ public class Graph extends GenericNode<NodeND> {
         }
     }
 
-    @Override
-    public void add(String name, int index, NodeND value) {
-        super.add(name, index, value);
-
-        for (NodeND n : elements) {
-            Pair<NodeND, NodeND> key = new Pair<>(value, n);
-            double distance = value.distance(n);
-
-            distances.put(key, distance);
-        }
-    }
-
     /**
-     * Get the distance between two nodes.
+     * Get the distance between two nodes. If the distance is not cached in the distance matrix,
+     * computes the distances between the two nodes and stores it.
      * @param i the first node
      * @param j the second node
      * @return 0.0 if the two nodes are the sames or if they are not in the graph, otherwise the distance.
@@ -61,8 +51,10 @@ public class Graph extends GenericNode<NodeND> {
         if (i.equals(j))
             return 0.0;
         Double d = getUniqueValue(distances, i, j);
-        if (d == null)
-            return 0.0;
+        if (d == null) {
+            d = i.distance(j);
+            putUniqueValue(distances, i, j, d);
+        }
         return d;
     }
 }

@@ -36,13 +36,13 @@ public class Pheromone {
         Double v = getUniqueValue(pheromone, i, j);
         if (v == null) {
             v = t0;     // initialization on demand
-            PairMapUtils.setUniqueValue(pheromone, i, j, v);
+            PairMapUtils.putUniqueValue(pheromone, i, j, v);
         }
         return v;
     }
 
     public void set(NodeND i, NodeND j, double value) {
-        setUniqueValue(pheromone, i, j, value);
+        putUniqueValue(pheromone, i, j, value);
     }
 
     /**
@@ -57,7 +57,7 @@ public class Pheromone {
             currentValue = value + t0;
         else
             currentValue += value;
-        setUniqueValue(pheromone, i, j, currentValue);
+        putUniqueValue(pheromone, i, j, currentValue);
     }
 
     /**

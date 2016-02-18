@@ -11,7 +11,7 @@ import java.util.*;
  * each with a position (or index) in this array and a name. The name and the position can
  * be used to take the saved values.
  *
- * This class can be used to represent a single node or a collection of node (a graph).
+ * This class can be used to represent a single node or a collection of nodes (a graph).
  */
 public class GenericNode<T> implements Iterable<T> {
 
@@ -36,13 +36,15 @@ public class GenericNode<T> implements Iterable<T> {
     }
 
     /**
-     * Add a new value to the elements.
-     * The name and index of the new value will be the current size of the elements.
+     * Add a new element with a specified name and index to the elements.
+     * The name and the index will be the given parameters.
+     * @param name the name of the new value
+     * @param index the position of the new value
      * @param value the new value
      */
-    public void add(T value) {
-        int index = elements.size();
-        elements.add(index, value);
+    public void add(String name, int index, T value) {
+        elements.add(value);
+        names.put(name, index);
     }
 
     /**
@@ -52,7 +54,7 @@ public class GenericNode<T> implements Iterable<T> {
      * @param value the new value
      */
     public void add(int index, T value) {
-        add("" + index, value);
+        add("" + index, index, value);
     }
 
     /**
@@ -68,15 +70,13 @@ public class GenericNode<T> implements Iterable<T> {
     }
 
     /**
-     * Add a new element with a specified name and index to the elements.
-     * The name and the index will be the given parameters.
-     * @param name the name of the new value
-     * @param index the position of the new value
+     * Add a new value to the elements.
+     * The name and index of the new value will be the current size of the elements.
      * @param value the new value
      */
-    public void add(String name, int index, T value) {
-        elements.add(value);
-        names.put(name, index);
+    public void add(T value) {
+        int index = elements.size();
+        add("" + index, index, value);
     }
 
     /**
