@@ -31,18 +31,19 @@ public class Cycle extends Path {
      * @return the index MOD the size of elements
      */
     protected int circular(int index) {
-        if (index > size()) index %= size();
+        int size = size();
+        if (index >= size && size > 0) index %= size;
         return index;
     }
 
     @Override
     public void add(String name, int index, NodeND value) {
-        super.add(name, circular(index), value);
+        super.add(name, index, value);
     }
 
     @Override
     public void add(int index, NodeND value) {
-        super.add(circular(index), value);
+        super.add(index, value);
     }
 
     @Override
