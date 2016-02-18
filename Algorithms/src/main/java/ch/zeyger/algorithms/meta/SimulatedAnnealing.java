@@ -29,7 +29,7 @@ public class SimulatedAnnealing {
     protected double minGain = 0.0;
 
     /** Time limits in milliseconds */
-    protected long stopTime = 180000;
+    protected long stopTime = 10000;
     /** Random seed. */
     protected long seed;
 

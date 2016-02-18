@@ -40,7 +40,7 @@ public class PairMapUtils {
      * @param value the new value for the pair
      * @param <T> type of the elements inside the pair
      */
-    public static <T> void setUniqueValue(Map<Pair<T,T>, Double> map, T i, T j, double value) {
+    public static <T> void putUniqueValue(Map<Pair<T,T>, Double> map, T i, T j, double value) {
         Pair<T, T> key = new Pair<>(i, j);
         if (!map.containsKey(key)) {
             Pair<T, T> yek = new Pair<>(j, i);      // the two nodes are exchanged

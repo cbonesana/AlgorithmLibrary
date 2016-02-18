@@ -35,18 +35,19 @@ public class Opt2 extends Opt {
     public void exchange(int i, int j, Cycle cycle) {
         int b, c;
 
+        // b should always be the smallest one
         if(i<j) {
-            b = i + 1;
+            b = i;
             c = j;
         } else {
-            b = j + 1;
+            b = j;
             c = i;
         }
 
-        for (int n = 0; n < (c - b + 1)/2; n++) {
-            int bn = b + n;
-            int cn = c - n;
-            cycle.swap(bn, cn);
+        for (int n = 0; n < (c - b +1) / 2; n++) {
+            int dst = c - n;
+            int src = b + n;
+            cycle.swap(src, dst);
         }
     }
 }
