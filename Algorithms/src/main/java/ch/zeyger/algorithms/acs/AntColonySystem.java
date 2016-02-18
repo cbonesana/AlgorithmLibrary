@@ -41,7 +41,7 @@ public class AntColonySystem {
 
     protected int maxBestCounter;
     protected int maxLocalCounter;
-    protected int optIteration = 100;   // this is a workaround for an infinite loop inside the Opt2 class
+    protected int optIteration = 1000; // this is a workaround for an infinite loop inside the Opt2 class
 
     /**
      * Initialize the Ant Colony System with some parameters.
