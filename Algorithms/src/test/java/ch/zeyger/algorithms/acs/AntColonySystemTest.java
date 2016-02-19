@@ -13,7 +13,7 @@ import org.junit.Test;
  */
 public class AntColonySystemTest extends TSP {
 
-    int ants            = 4;
+    int ants            = 2; // 4;
     int stopTime        = 180;   // 3 minutes
     int maxBestCounter  = 30;
     int maxLocalCounter = 100;
@@ -31,7 +31,7 @@ public class AntColonySystemTest extends TSP {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        graph = graphs.get("ch130.tsp");
+        graph = graphs.get("berlin52.tsp");
     }
 
     @Test

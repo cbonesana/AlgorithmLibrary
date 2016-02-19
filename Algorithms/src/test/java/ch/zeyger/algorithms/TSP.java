@@ -22,7 +22,7 @@ public class TSP {
     public double best = 0.0;
 
     public String[] filenames = {
-            "ch130.tsp", "ed_rares.tsp", "ed_rares_2.tsp", "plain3.tsp"
+            "berlin52.tsp", "ch130.tsp", "ed_rares.tsp", "ed_rares_2.tsp", "plain3.tsp"
     };
 
     @Before
@@ -41,6 +41,7 @@ public class TSP {
 
         try (Scanner scanner = new Scanner(new File(res.getFile()))) {
             int i = 0;
+            boolean read = false;
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine(); i++;
 
@@ -49,8 +50,9 @@ public class TSP {
                     best = Double.parseDouble(chunk[1]);
                     continue;
                 }
-                if (i < 8) continue;
                 if (line.startsWith("EOF")) break;
+                if (line.equals("NODE_COORD_SECTION")) { read = true; continue; }
+                if (!read) continue;
 
                 String[] chunk = line.split(" ");
                 int k = Integer.parseInt(chunk[0]);

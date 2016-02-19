@@ -123,4 +123,8 @@ public class GenericNode<T> implements Iterable<T> {
     public Iterator<T> iterator() {
         return elements.iterator();
     }
+
+    public List<T> elements() {
+        return elements;
+    }
 }

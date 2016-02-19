@@ -3,10 +3,9 @@ package ch.zeyger.algorithms.acs;
 import ch.zeyger.algorithms.data.nodes.NodeND;
 import ch.zeyger.algorithms.data.structures.Cycle;
 import ch.zeyger.algorithms.data.structures.Graph;
+import org.apache.commons.math3.random.RandomDataGenerator;
 
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Author:  Claudio Bonesana
@@ -15,18 +14,17 @@ import java.util.Set;
  */
 public class Ant {
 
-    protected Random rand;
+    protected RandomDataGenerator rand;
 
     protected Pheromone pheromone;
     protected Cycle solution;
     protected Graph graph;
-    protected int graphSize;
 
-    protected Set<NodeND> map;      // list of already visited nodes
+    protected Set<NodeND> map;      // list of available nodes
     protected NodeND current;       // current visited node
     protected NodeND next;          // next visited node
 
-    public Ant(Pheromone pheromone, Graph graph, Random rand) {
+    public Ant(Pheromone pheromone, Graph graph, RandomDataGenerator rand) {
         this.pheromone = pheromone;
         this.graph = graph;
         this.rand = rand;
@@ -38,15 +36,12 @@ public class Ant {
      */
     public void initialize(int startNode) {
         // clean the previous solution
-        graphSize = graph.size();
         map = new HashSet<>();
-
         solution = new Cycle();
-
         current = graph.get(startNode);
-
-        solution.add(current);  // add the first city to the cycle
-        map.add(current);       // mark the first city as visited
+        map.addAll(graph.elements());
+        map.remove(current);
+        solution.add(current);
     }
 
     /**
@@ -55,77 +50,78 @@ public class Ant {
      * @param q0 Exploitation/Exploration parameter
      */
     private void visitNode(double q0) {
-
-        double q = rand.nextDouble();
+        double q = rand.nextUniform(0.0, 1.0);
         NodeND r = current;
-        NodeND chosenCity;
+        NodeND chosenNode;
 
         // Compute maximum value
-        int available_cities = graphSize - map.size();
-
-        if (available_cities == 1)
-            q0 = 1.0;
-
         if (q <= q0) {
             // Exploitation: find better node
-            NodeND nodeMax = null;
-            double max = 0;
-            for (int i = 0; i < graphSize; i++){
-                NodeND n = graph.get(i);
-
-                if (!map.contains(n)) {
-                    available_cities++;
-                }
-                if (!map.contains(n) && !n.equals(r)) {
-                    double p = pheromone.get(r, n);
-                    double d = graph.distance(r, n);
-                    double v = p / (d * d); /* pow((1/d), beta);*/
-                    if (v > max) {
-                        nodeMax = n;
-                        max = v;
-                    }
-                }
-            }
-            chosenCity = nodeMax;
-
+            chosenNode = exploitation(r);
         } else {
             // Exploration: take a random node
-            double[] probability = new double[graphSize];
-            double sum = 0;
-
-            // compute the probability of each available node
-            for (int i = 0; i < graphSize; i++){
-                NodeND n = graph.get(i);
-
-                if (!map.contains(n) && !n.equals(r)) {
-                    double p = pheromone.get(r, n);
-                    double d = graph.distance(r, n);
-                    probability[i] = p / (d * d); /* pow((1/d), beta);*/
-                    sum += probability[i];
-                } else {
-                    probability[i] = 0;
-                }
-            }
-
-            // chose the most probable node
-            double prob = rand.nextDouble() * sum;
-            double prob_sum = 0;
-
-            int cityToExplore = graphSize - 1;
-            for (int i = 0; i < graphSize; i++){
-                prob_sum += probability[i];
-
-                if (prob < prob_sum) {
-                    cityToExplore = i;
-                    break;
-                }
-            }
-            chosenCity = graph.get(cityToExplore);
+            chosenNode = exploration(r);
         }
 
-        map.add(chosenCity);
-        next = chosenCity;
+        map.remove(chosenNode);
+        next = chosenNode;
         solution.add(next);
+    }
+
+    /**
+     * Chose a random node between the remain nodes.
+     * @param r the current node
+     * @return a nice random node
+     */
+    protected NodeND exploration(NodeND r) {
+        NodeND chosenNode = null;
+        Map<NodeND, Double> probabilities = new HashMap<>();
+        double sum = 0;
+
+        // compute the probability of each available node
+        for (NodeND n : map) {
+            double probability;
+            double p = pheromone.get(r, n);
+            double d = graph.distance(r, n);
+            probability = p / (d * d); /* pow((1/d), beta);*/
+            sum += probability;
+            probabilities.put(n, probability);
+        }
+
+        // chose the most probable node
+        double prob = rand.nextUniform(0.0, sum);
+        double prob_sum = 0;
+
+        for (NodeND n : map) {
+            prob_sum += probabilities.get(n);
+            if (prob < prob_sum) {
+                chosenNode = n;
+                break;
+            }
+        }
+
+        return chosenNode;
+    }
+
+    /**
+     * Find the better node for the given one, between the remain nodes.
+     * @param r the current node
+     * @return the better node
+     */
+    protected NodeND exploitation(NodeND r) {
+        NodeND chosenNode = null;
+        double max = 0;
+        for (NodeND n : map) {
+            double p = pheromone.get(r, n);
+            double d = graph.distance(r, n);
+            double v = p / (d * d); /* pow((1/d), beta);*/
+            if (v > max) {
+                chosenNode = n;
+                max = v;
+            }
+        }
+
+        return chosenNode;
     }
 
     /**
@@ -137,7 +133,6 @@ public class Ant {
         double p0 = pheromone.get(current, next);
         double p1 = p0 + ro * (t0 - p0);
 
-//        pheromone.layDown(next, current, p0); TODO: check that the pheromone is not bidirectional
         pheromone.layDown(current, next, p1);
 
         current = next;
