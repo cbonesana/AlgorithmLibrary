@@ -50,7 +50,7 @@ public class Opt2Test extends TSP {
 
     @Test
     public void testOpt2() throws Exception {
-        opt2.opt(input, 100);
+        opt2.opt(input, 10000);
         System.out.println(input.getLength());
     }
 }

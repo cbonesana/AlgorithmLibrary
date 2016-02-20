@@ -2,6 +2,11 @@ package ch.zeyger.algorithms.opt;
 
 import ch.zeyger.algorithms.data.structures.Cycle;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.PriorityQueue;
+
 /**
  * Author:  Claudio Bonesana
  * Date:    13.02.2016
@@ -9,6 +14,7 @@ import ch.zeyger.algorithms.data.structures.Cycle;
  */
 public abstract class Opt {
 
+    // gains are negative because we reduce the cycle length
     protected double minExchangeValue;
     protected double minStopValue;
 
@@ -43,6 +49,45 @@ public abstract class Opt {
      */
     public abstract void exchange(int i, int j, Cycle cycle);
 
+
+
+    private class Exchange implements Comparable<Exchange> {
+        public int i, j;
+        public double gain;
+
+        public Exchange(int i, int j, double gain) {
+            this.i = i;
+            this.j = j;
+            this.gain = gain;
+        }
+
+        @Override
+        public int compareTo(Exchange o) {
+            return Double.compare(gain, o.gain);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Exchange)) return false;
+
+            Exchange exchange = (Exchange) o;
+
+            return i == exchange.i && j == exchange.j;
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result = i;
+            result = 31 * result + j;
+            return result;
+        }
+    }
+
+    Map<Exchange, Integer> tabuExchanges = new HashMap<>();
+
+
     /**
      * Perform the search for the maximum gain and, if it is acceptable, swap
      * the two nodes
@@ -51,22 +96,41 @@ public abstract class Opt {
      */
     public double update(Cycle cycle) {
         double bestGain = 0;
-        int bestI = 0;
-        int bestJ = 0;
+//        int bestI = -1;
+//        int bestJ = -1;
+
+        PriorityQueue<Exchange> exchanges = new PriorityQueue<>();
 
         for (int i = 0; i < cycle.size(); i++) {
             for (int j = i + 2; j < cycle.size(); j++) {
                 double gain = computeGain(i, j, cycle);
-                if (gain < bestGain) {
-                    bestGain = gain;
-                    bestI = i;
-                    bestJ = j;
-                }
+                if (gain < 0.0) // we have an effective gain
+                    exchanges.add(new Exchange(i,j,gain));
+//                if (gain < bestGain) {
+//                    bestGain = gain;
+//                    bestI = i;
+//                    bestJ = j;
+//                }
             }
         }
-        if (bestGain < minExchangeValue)
-            exchange(bestI, bestJ, cycle);
-        return bestGain;
+
+        // System.out.println("Exchanges: " + exchanges.size());
+        if (exchanges.isEmpty())
+            return 0.0;
+
+        Exchange e = exchanges.poll();
+        for (int i = 0; i < exchanges.size(); i++) {
+            if (!tabuExchanges.containsKey(e)) {
+                exchange(e.i, e.j, cycle);
+                tabuExchanges.put(e, 10);
+                break;
+            } /*else {
+                System.out.println(e.i + " " + e.j + " is tabu for " + tabuExchanges.get(e));
+            }*/
+            e = exchanges.poll();
+        }
+
+        return e.gain;
     }
 
     /**
@@ -89,9 +153,25 @@ public abstract class Opt {
     public void opt(Cycle cycle, int iterations) {
         double bestGain;
         for (int i = 0; i < iterations; i++) {
+            // System.out.println(i);
             bestGain = update(cycle);
             if (bestGain >= minStopValue)
                 break;
+            cleanup();
         }
+    }
+
+    private void cleanup() {
+        // System.out.print("Tabu Map: " + tabuExchanges.size() + " -> ");
+
+        for (Iterator<Map.Entry<Exchange, Integer>> it = tabuExchanges.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry<Exchange, Integer> entry = it.next();
+            int waiting = entry.getValue() -1;
+            if (waiting == 0)
+                it.remove();
+            else
+                entry.setValue(waiting);
+        }
+        // System.out.println(tabuExchanges.size());
     }
 }

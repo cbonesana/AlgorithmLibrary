@@ -4,7 +4,8 @@ import ch.zeyger.algorithms.TSP;
 import ch.zeyger.algorithms.builders.random.RandomBuilder;
 import ch.zeyger.algorithms.data.structures.Cycle;
 import ch.zeyger.algorithms.data.structures.Graph;
-import org.apache.commons.math3.random.RandomDataGenerator;
+import org.apache.commons.math3.random.RandomGenerator;
+import org.apache.commons.math3.random.Well1024a;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,8 +32,7 @@ public class AntTest extends TSP {
         input = new RandomBuilder(0).buildCycle(graph);
         t0 = input.getLength() / input.size();
         pheromone = new Pheromone(t0);
-        RandomDataGenerator rand = new RandomDataGenerator();
-        rand.reSeed(0);
+        RandomGenerator rand = new Well1024a(0);
         ant = new Ant(pheromone, graph, rand);
     }
 

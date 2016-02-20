@@ -7,7 +7,8 @@ import ch.zeyger.algorithms.data.structures.Cycle;
 import ch.zeyger.algorithms.data.structures.Graph;
 import ch.zeyger.algorithms.opt.Opt;
 import ch.zeyger.algorithms.opt.Opt2;
-import org.apache.commons.math3.random.RandomDataGenerator;
+import org.apache.commons.math3.random.RandomGenerator;
+import org.apache.commons.math3.random.Well1024a;
 
 /**
  * Author:  Claudio Bonesana
@@ -16,7 +17,7 @@ import org.apache.commons.math3.random.RandomDataGenerator;
  */
 public class AntColonySystem {
 
-    protected RandomDataGenerator rand;
+    protected RandomGenerator rand;
 
     protected Cycle bestSolution;             // best solution in absolute
     protected Cycle localSolution;            // best solution at each iteration
@@ -67,8 +68,7 @@ public class AntColonySystem {
         this.maxBestCounter = maxBestCounter;
         this.maxLocalCounter = maxLocalCounter;
 
-        rand = new RandomDataGenerator();
-        rand.reSeed(seed);
+        rand = new Well1024a(0);
     }
 
     /**
@@ -122,7 +122,7 @@ public class AntColonySystem {
         if (optimizationAlgorithm == null) optimizationAlgorithm = new Opt2();
 
         // neighbourhood an initial solution
-        if (startNode == -1) startNode = rand.nextInt(0, size-1); // random start
+        if (startNode == -1) startNode = rand.nextInt(size); // random start
 
         bestSolution = buildAlgorithm.buildCycle(graph, startNode);
         optimizationAlgorithm.opt(bestSolution, optIteration);
@@ -138,13 +138,13 @@ public class AntColonySystem {
         for (int i = 0; i < antNumber; i++)
             ants[i] = new Ant(pheromone, graph, rand);
 
-//        do {  TODO: parametrize iteration
+//        do {
         for (int c = 0; c < maxIterations; c++) {
             System.out.println(String.format("%3d %.4f", c, bestLength));  //TODO: remove
 
             // place the ants on random nodes
             for (Ant ant : ants)
-                ant.initialize(rand.nextInt(0, size-1));
+                ant.initialize(rand.nextInt(size));
 
             // each ant search the neighbourhood for solution by adding node after node
             for (int i=0; i < graph.size() -1; i++)
@@ -188,7 +188,7 @@ public class AntColonySystem {
             for (int i=0; i<size; i++) {
                 for (int j=i + 1; j<size; j++) {
                     NodeND ni = graph.get(i);
-                    NodeND nj = graph.get(i);
+                    NodeND nj = graph.get(j);
                     double currentPheromone = pheromone.get(ni, nj);
                     double t0Threshold = t0 / threshold;
 
@@ -226,7 +226,6 @@ public class AntColonySystem {
                     r = localSolution.get(i);
                     s = localSolution.get(i + 1);
                     pheromone.layDown(r, s, alpha / localMinLength);
-                    pheromone.set(s, r, pheromone.get(r, s));
                 }
             }
 

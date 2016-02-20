@@ -20,10 +20,10 @@ public class Opt2 extends Opt {
      */
     @Override
     public double computeGain(int i, int j, Cycle cycle) {
-        return cycle.distance(cycle.get(i), cycle.get(j))
-                +cycle.distance(cycle.get(i + 1), cycle.get(j + 1))
-                -cycle.distance(cycle.get(i), cycle.get(i + 1))
-                -cycle.distance(cycle.get(j), cycle.get(j + 1));
+        return cycle.distance(cycle.get(i), cycle.get(j))               //   i=a   j=d  ->  +ad
+                +cycle.distance(cycle.get(i + 1), cycle.get(j + 1))     // i+1=b j+1=c  ->  +bc
+                -cycle.distance(cycle.get(i), cycle.get(i + 1))         //   i=a i+1=b  ->  -ab
+                -cycle.distance(cycle.get(j), cycle.get(j + 1));        //   j=d j+1=c  ->  -cd
     }
 
     /**

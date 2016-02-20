@@ -3,9 +3,12 @@ package ch.zeyger.algorithms.acs;
 import ch.zeyger.algorithms.data.nodes.NodeND;
 import ch.zeyger.algorithms.data.structures.Cycle;
 import ch.zeyger.algorithms.data.structures.Graph;
-import org.apache.commons.math3.random.RandomDataGenerator;
+import org.apache.commons.math3.random.RandomGenerator;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Author:  Claudio Bonesana
@@ -14,7 +17,7 @@ import java.util.*;
  */
 public class Ant {
 
-    protected RandomDataGenerator rand;
+    protected RandomGenerator rand;
 
     protected Pheromone pheromone;
     protected Cycle solution;
@@ -24,7 +27,7 @@ public class Ant {
     protected NodeND current;       // current visited node
     protected NodeND next;          // next visited node
 
-    public Ant(Pheromone pheromone, Graph graph, RandomDataGenerator rand) {
+    public Ant(Pheromone pheromone, Graph graph, RandomGenerator rand) {
         this.pheromone = pheromone;
         this.graph = graph;
         this.rand = rand;
@@ -50,7 +53,7 @@ public class Ant {
      * @param q0 Exploitation/Exploration parameter
      */
     private void visitNode(double q0) {
-        double q = rand.nextUniform(0.0, 1.0);
+        double q = rand.nextDouble();
         NodeND r = current;
         NodeND chosenNode;
 
@@ -89,7 +92,7 @@ public class Ant {
         }
 
         // chose the most probable node
-        double prob = rand.nextUniform(0.0, sum);
+        double prob = rand.nextDouble() * sum;
         double prob_sum = 0;
 
         for (NodeND n : map) {
