@@ -11,6 +11,11 @@ import java.util.List;
  */
 public class ProposeAndReject {
 
+    /**
+     * This matching is optimal for men (first list).
+     * @param men list of men
+     * @param women list of woman
+     */
     public void match(List<Element> men, List<Element> women) {
 
         // Initialize each person to be free.
