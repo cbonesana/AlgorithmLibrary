@@ -1,5 +1,7 @@
 package ch.zeyger.algorithms.data.nodes;
 
+import ch.zeyger.algorithms.data.edges.HyperEdge;
+
 import java.util.*;
 
 /**
@@ -23,6 +25,15 @@ public class GenericNode<T> implements Iterable<T> {
      * Each dimension can have a name
      */
     protected Map<String, Integer> names = new HashMap<>();
+
+    /**
+     * List of edges that enter in this node.
+     */
+    protected List<HyperEdge> inEdges = new ArrayList<>();
+    /**
+     * List of edges that exit from this node.
+     */
+    protected List<HyperEdge> outEdges = new ArrayList<>();
 
     /**
      * Empty constructor.

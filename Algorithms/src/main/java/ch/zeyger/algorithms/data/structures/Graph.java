@@ -14,6 +14,10 @@ import static ch.zeyger.algorithms.utils.PairMapUtils.putUniqueValue;
  * Author:  Claudio Bonesana
  * Date:    13.02.2016
  * Project: Algorithms
+ *
+ * This structure represents a fully connected graph where each node is
+ * connected to all the other nodes. It offers a method to get the current
+ * distance between two nodes.
  */
 public class Graph extends GenericNode<NodeND> {
 
@@ -35,9 +39,8 @@ public class Graph extends GenericNode<NodeND> {
     public Graph(Graph another) {
         super(another);
         this.distances = new HashMap<>(another.distances.size());
-        for (Map.Entry<Pair<NodeND, NodeND>, Double> entry : another.distances.entrySet()) {
+        for (Map.Entry<Pair<NodeND, NodeND>, Double> entry : another.distances.entrySet())
             distances.put(entry.getKey(), entry.getValue());
-        }
     }
 
     /**
